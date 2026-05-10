@@ -88,13 +88,13 @@ To install Playwright's chromimum browser, build `AspNetCore-RealTimeSharedNotes
 ## Screenshots
 
 <p>
-    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/login.PNG" hspace="10" style="max-width: 40%;" >
-    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/mobilenoteslist.PNG" hspace="10" style="max-width: 40%;" >
+    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/login.PNG" hspace="10">
+    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/mobilenoteslist.PNG" >
 </p>
 
 <p>
-    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/apicreated.PNG" hspace="10" style="max-width: 40%;" >
-    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/internetoffline.PNG" hspace="10" style="max-width: 40%;" >
+    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/apicreated.PNG" hspace="10">
+    <img src="https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/internetoffline.PNG" hspace="10" >
 </p>
 
 ![screenshot](https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/apiswagger.png?raw=true)
