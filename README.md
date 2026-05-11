@@ -45,7 +45,7 @@ Monolithic design: MVC + service layer + data layer (communicates with DB). The 
 - **SignalR:** Auto-reconnects after internet loss, with overlay notification.
 - **User Deletion:** If a logged-in user is deleted, they immediately lose posting ability and are logged out on page refresh.
 - **API / Swagger:** API documentation & playground at `https://localhost:7194/swagger`.
-- **Database:** Async requests whereever possible. EF writing operations are automatically rolled back when necessary to prevent partial saves and ensure data consistency.
+- **Database:** Async requests whereever possible. EF writing operations are automatically rolled back when necessary (on error) to prevent partial saves and ensure data consistency.
 
 
 ## Database Structure
