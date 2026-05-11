@@ -2,10 +2,12 @@
 using AspNetCore_RealTimeSharedNotes.Models;
 using AspNetCore_RealTimeSharedNotes.Models.Constants;
 using AspNetCore_RealTimeSharedNotes.Models.Dtos;
+using AspNetCore_RealTimeSharedNotes.Models.Responses;
 using AspNetCore_RealTimeSharedNotes.Models.ViewModels;
 using AspNetCore_RealTimeSharedNotes.Services;
 using AspNetCore_RealTimeSharedNotes.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace AspNetCore_RealTimeSharedNotes.UnitTests;
@@ -15,6 +17,7 @@ public class UsersServiceTests : TestBase
 {
     private Mock<IUsersRepository> _repoMock;
     private Mock<IApiKeyService> _apiKeyServiceMock;
+    private Mock<ILogger<UsersService>> _loggerMock;
     private UsersService _service;
 
     [SetUp]
@@ -22,7 +25,12 @@ public class UsersServiceTests : TestBase
     {
         _repoMock = new Mock<IUsersRepository>();
         _apiKeyServiceMock = new Mock<IApiKeyService>();
-        _service = new UsersService(_apiKeyServiceMock.Object, _repoMock.Object);
+        _loggerMock = new Mock<ILogger<UsersService>>();
+        _service = new UsersService(_apiKeyServiceMock.Object, _repoMock.Object, _loggerMock.Object);
+
+        _repoMock
+            .Setup(r => r.ExecuteInTransactionAsync(It.IsAny<Func<Task<CreateUserResponse>>>()))
+            .Returns<Func<Task<CreateUserResponse>>>(action => action());
     }
 
     //CreateUserAsync
@@ -37,7 +45,7 @@ public class UsersServiceTests : TestBase
 
     private static TestCaseData[] CreateUserAsync_Cases() =>
     [
-        new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.User, false, false, null, "Email already taken"))
+        new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.User, false, false, null, "Failed to create user."))
             .SetName("RepositoryFailure_ReturnsFalseWithError"),
         new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.Admin, true, true, UserRoles.User, null))
             .SetName("AdminCreator_AlwaysAssignsUserRole"),

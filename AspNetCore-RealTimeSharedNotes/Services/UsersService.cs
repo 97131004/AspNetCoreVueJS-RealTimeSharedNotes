@@ -13,11 +13,13 @@ public class UsersService : IUsersService
 {
     private readonly IApiKeyService _apiKeyService;
     private readonly IUsersRepository _repo;
+    private readonly ILogger<UsersService> _logger;
 
-    public UsersService(IApiKeyService apiKeyService, IUsersRepository repo)
+    public UsersService(IApiKeyService apiKeyService, IUsersRepository repo, ILogger<UsersService> logger)
     {
         _apiKeyService = apiKeyService;
         _repo = repo;
+        _logger = logger;
     }
 
     public Task<List<UserDto>> GetAllUsersAsync()
@@ -32,19 +34,28 @@ public class UsersService : IUsersService
         var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
 
         //if any db writing step fails, all operations will be rolled back and no partial data will be saved
-        return await _repo.ExecuteInTransactionAsync<CreateUserResponse>(async () =>
+        try
         {
-            var result = await _repo.CreateUserAsync(user, model.Password);
-            if (!result.Succeeded)
-                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+            return await _repo.ExecuteInTransactionAsync<CreateUserResponse>(async () =>
+            {
+                var result = await _repo.CreateUserAsync(user, model.Password);
+                if (!result.Succeeded)
+                    throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
 
-            var roleResult = await _repo.AddRoleToUserAsync(user, allowedRole);
-            if (!roleResult.Succeeded)
-                throw new InvalidOperationException(string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                var roleResult = await _repo.AddRoleToUserAsync(user, allowedRole);
+                if (!roleResult.Succeeded)
+                    throw new InvalidOperationException(string.Join(", ", roleResult.Errors.Select(e => e.Description)));
 
-            var apiKey = await _apiKeyService.CreateApiKeyAsync(user.Id);
-            return new CreateUserResponse(true, null, apiKey);
-        });
+                var apiKey = await _apiKeyService.CreateApiKeyAsync(user.Id);
+                return new CreateUserResponse(true, null, apiKey);
+            });
+        }
+        catch (Exception ex)
+        {
+            //manually log that error, since globalexceptionhandler will miss try-catches
+            _logger.LogError(ex, "Failed to create user {Email}", model.Email);
+            return new CreateUserResponse(false, "Failed to create user.", null);
+        }
     }
 
     public async Task<bool> DeleteUserAsync(string requestingUserId, string requestingRole, string targetUserId)
