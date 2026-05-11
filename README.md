@@ -7,7 +7,7 @@ A real-time collaborative notes application. Logged-in users can write and post 
 ![screenshot](https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/userslist.PNG?raw=true)
 
   
-**2 users sharing notes with each other in real-time (Playwright test case):**
+**2 users sharing notes with each other in real-time (recorded Playwright test case):**
   
 ![screenshot](https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/playwright_AspNetCore-RealTimeSharedNotes.gif?raw=true)
 
