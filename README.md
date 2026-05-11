@@ -77,6 +77,7 @@ On the very first start of the main project `AspNetCore-RealTimeSharedNotes`, a 
 **Password**: `superadmin123!`  
 **Client ID (API/Oauth2)**: `superadmin-sdq9`  
 **Client Secret (API/Oauth2)**: `09cb65b4-ada9-42e9-8779-4f55e68b85a2`  
+**Grant Type (API/Oauth2)**: `client_credentials`  
 
 ---
 
