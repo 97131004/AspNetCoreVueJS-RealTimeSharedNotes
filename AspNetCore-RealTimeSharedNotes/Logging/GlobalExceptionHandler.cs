@@ -15,8 +15,7 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
     {
         _logger.LogError(exception, exception.Message);
 
-        // Return false to let the built-in UseExceptionHandler continue
-        // handling the response (redirect to /Home/Error etc.)
+        //return false to let the built-in UseExceptionHandler continue handling the response (e.g. redirect to /home/error)
         return ValueTask.FromResult(false);
     }
 }

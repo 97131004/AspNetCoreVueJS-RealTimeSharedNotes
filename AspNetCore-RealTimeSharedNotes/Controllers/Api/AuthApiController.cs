@@ -11,8 +11,8 @@ public class AuthApiController : ControllerBase
 
     public AuthApiController(IJwtTokenService jwtTokenService) => _jwtTokenService = jwtTokenService;
 
-    //OAuth2: POST /api/auth/token
-    //Body (application/x-www-form-urlencoded): grant_type, client_id, client_secret
+    //oauth2 post: /api/auth/token
+    //body (application/x-www-form-urlencoded): grant_type, client_id, client_secret
     [HttpPost("token")]
     [Consumes("application/x-www-form-urlencoded")]
     public async Task<IActionResult> Token([FromForm] string grant_type, [FromForm] string client_id, [FromForm] string client_secret)

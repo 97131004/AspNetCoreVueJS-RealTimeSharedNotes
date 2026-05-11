@@ -35,23 +35,34 @@ public class UsersServiceTests : TestBase
 
     //CreateUserAsync
 
+    [Test]
+    public async Task CreateUserAsync_RepositoryFailure_ReturnsFalseWithError()
+    {
+        const string expectedError = "Failed to create user.";
+        var model = new CreateUserViewModel { Email = "test@test.com", Password = "Pass123!", Role = UserRoles.User };
+
+        _repoMock.Setup(r => r.CreateUserAsync(It.IsAny<ApplicationUser>(), model.Password))
+                 .ReturnsAsync(IdentityResult.Failed([new IdentityError { Description = expectedError }]));
+
+        var (success, error, apiKey) = await _service.CreateUserAsync(model, UserRoles.Admin);
+
+        Assert.That(success, Is.False);
+        Assert.That(error, Does.Contain(expectedError));
+        Assert.That(apiKey, Is.Null);
+    }
+
     public record CreateUserCase(
         string CreatorRole,
         string RequestedRole,
-        bool RepoSucceeds,
-        bool ExpectedSuccess,
-        string? ExpectedAssignedRole,
-        string? ExpectedErrorContains);
+        string ExpectedAssignedRole);
 
     private static TestCaseData[] CreateUserAsync_Cases() =>
     [
-        new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.User, false, false, null, "Failed to create user."))
-            .SetName("RepositoryFailure_ReturnsFalseWithError"),
-        new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.Admin, true, true, UserRoles.User, null))
+        new TestCaseData(new CreateUserCase(UserRoles.Admin, UserRoles.Admin, UserRoles.User))
             .SetName("AdminCreator_AlwaysAssignsUserRole"),
-        new TestCaseData(new CreateUserCase(UserRoles.SuperAdmin, UserRoles.Admin, true, true, UserRoles.Admin, null))
+        new TestCaseData(new CreateUserCase(UserRoles.SuperAdmin, UserRoles.Admin, UserRoles.Admin))
             .SetName("SuperAdminCreator_CanAssignAdminRole"),
-        new TestCaseData(new CreateUserCase(UserRoles.SuperAdmin, UserRoles.SuperAdmin, true, true, UserRoles.User, null))
+        new TestCaseData(new CreateUserCase(UserRoles.SuperAdmin, UserRoles.SuperAdmin, UserRoles.User))
             .SetName("SuperAdminCreator_CannotAssignSuperAdminRole"),
     ];
 
@@ -60,31 +71,17 @@ public class UsersServiceTests : TestBase
     {
         var model = new CreateUserViewModel { Email = "test@test.com", Password = "Pass123!", Role = cuc.RequestedRole };
 
-        if (cuc.RepoSucceeds)
-        {
-            _repoMock.Setup(r => r.CreateUserAsync(It.IsAny<ApplicationUser>(), model.Password))
-                     .ReturnsAsync(IdentityResult.Success);
-            _repoMock.Setup(r => r.AddRoleToUserAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
-                     .ReturnsAsync(IdentityResult.Success);
-            _apiKeyServiceMock.Setup(a => a.CreateApiKeyAsync(It.IsAny<string>()))
-                     .ReturnsAsync(new ApiKeyViewModel { ClientId = "cid", ClientSecret = "sec" });
-        }
-        else
-        {
-            _repoMock.Setup(r => r.CreateUserAsync(It.IsAny<ApplicationUser>(), model.Password))
-                     .ReturnsAsync(IdentityResult.Failed([new IdentityError { Description = cuc.ExpectedErrorContains! }]));
-        }
+        _repoMock.Setup(r => r.CreateUserAsync(It.IsAny<ApplicationUser>(), model.Password))
+                 .ReturnsAsync(IdentityResult.Success);
+        _repoMock.Setup(r => r.AddRoleToUserAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                 .ReturnsAsync(IdentityResult.Success);
+        _apiKeyServiceMock.Setup(a => a.CreateApiKeyAsync(It.IsAny<string>()))
+                 .ReturnsAsync(new ApiKeyViewModel { ClientId = "cid", ClientSecret = "sec" });
 
         var (success, error, apiKey) = await _service.CreateUserAsync(model, cuc.CreatorRole);
 
-        Assert.That(success, Is.EqualTo(cuc.ExpectedSuccess));
-
-        if (cuc.ExpectedErrorContains != null)
-            Assert.That(error, Does.Contain(cuc.ExpectedErrorContains));
-        if (!cuc.ExpectedSuccess)
-            Assert.That(apiKey, Is.Null);
-        if (cuc.ExpectedAssignedRole != null)
-            _repoMock.Verify(r => r.AddRoleToUserAsync(It.IsAny<ApplicationUser>(), cuc.ExpectedAssignedRole), Times.Once);
+        Assert.That(success, Is.True);
+        _repoMock.Verify(r => r.AddRoleToUserAsync(It.IsAny<ApplicationUser>(), cuc.ExpectedAssignedRole), Times.Once);
     }
 
     //DeleteUserAsync
