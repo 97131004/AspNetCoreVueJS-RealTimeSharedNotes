@@ -22,7 +22,7 @@ A real-time collaborative notes application. Logged-in users can write and post 
 
 ## Architecture
 
-Monolithic design: MVC + service layer + data layer (communicates with DB). The backend exposes REST APIs and SignalR endpoints. Controllers use dependency-injected services, which call the data layer (Entity Framework Core). Notes and users are stored in the database. API keys are securely stored (client id  + encrypted client secrets) in database. All user and note changes are broadcast to the frontend via SignalR (delta updates only). Frontend showcases different approaches: Login page (ASP.NET Razor SSR), Notes page (Vue.js component with Signal R), Users page (Vue.js component with async fetches).
+Monolithic design: MVC + service layer + data layer (communicates with DB). The backend exposes REST APIs and SignalR endpoints. Controllers use dependency-injected services, which call the data layer (Entity Framework Core). Notes and users are stored in the database. API keys are securely stored (client id  + encrypted client secrets) in the database. All note changes are broadcast to the frontend via SignalR (delta updates only). Frontend showcases different approaches: Login page (ASP.NET Razor SSR), Notes page (Vue.js component with Signal R), Users page (Vue.js component with async fetches).
 
 
 ## Features
