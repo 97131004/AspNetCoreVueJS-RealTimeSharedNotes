@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AspNetCore_RealTimeSharedNotes.Data.Interfaces;
 
-public interface IUsersRepository
+public interface IUsersRepository : IBaseRepository
 {
     Task<List<UserDto>> GetAllUsersAsync();
     Task<ApplicationUser?> GetUserAsync(string userId);

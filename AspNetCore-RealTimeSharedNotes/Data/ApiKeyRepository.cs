@@ -4,11 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore_RealTimeSharedNotes.Data;
 
-public class ApiKeyRepository : IApiKeyRepository
+public class ApiKeyRepository : BaseRepository, IApiKeyRepository
 {
-    private readonly ApplicationDbContext _db;
-
-    public ApiKeyRepository(ApplicationDbContext db) => _db = db;
+    public ApiKeyRepository(ApplicationDbContext db) : base(db) { }
 
     public async Task<ApiKey?> GetApiKeyAsync(string clientId)
     {

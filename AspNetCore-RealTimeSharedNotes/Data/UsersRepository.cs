@@ -7,14 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore_RealTimeSharedNotes.Data;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository : BaseRepository, IUsersRepository
 {
-    private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public UsersRepository(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public UsersRepository(ApplicationDbContext db, UserManager<ApplicationUser> userManager) : base(db)
     {
-        _db = db;
         _userManager = userManager;
     }
 
@@ -50,7 +48,7 @@ public class UsersRepository : IUsersRepository
     {
         return await _userManager.AddToRoleAsync(user, role);
     }
-       
+
     //auto-deletes user + its roles + its apikeys + its notes
     public async Task<bool> DeleteUserAsync(string userId)
     {
@@ -59,4 +57,5 @@ public class UsersRepository : IUsersRepository
             .ExecuteDeleteAsync(); //atomic deletion, works with race conditions, thus always succeeds
         return true;
     }
+
 }

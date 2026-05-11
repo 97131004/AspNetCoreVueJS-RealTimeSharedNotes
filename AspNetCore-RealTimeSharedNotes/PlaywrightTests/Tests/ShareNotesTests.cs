@@ -20,7 +20,7 @@ public class ShareNotesTests : PlaywrightTest
         {
             Headless = true, //hide browser window?
             Timeout = 30000,
-            //SlowMo = 1000, //runs test with delays (makes it easier to see whats being tested)
+            //SlowMo = 3000, //runs test with delays (makes it easier to see whats being tested)
         });
 
         _adminContext = await _browser.NewContextAsync(new BrowserNewContextOptions

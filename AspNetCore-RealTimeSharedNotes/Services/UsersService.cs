@@ -2,6 +2,7 @@ using AspNetCore_RealTimeSharedNotes.Data.Interfaces;
 using AspNetCore_RealTimeSharedNotes.Models;
 using AspNetCore_RealTimeSharedNotes.Models.Constants;
 using AspNetCore_RealTimeSharedNotes.Models.Dtos;
+using AspNetCore_RealTimeSharedNotes.Models.Responses;
 using AspNetCore_RealTimeSharedNotes.Models.ViewModels;
 using AspNetCore_RealTimeSharedNotes.Services.Interfaces;
 using Microsoft.Identity.Client;
@@ -24,18 +25,26 @@ public class UsersService : IUsersService
         return _repo.GetAllUsersAsync();
     }
 
-    public async Task<(bool success, string? error, ApiKeyViewModel? apiKey)> CreateUserAsync(CreateUserViewModel model, string creatorRole)
+    public async Task<CreateUserResponse> CreateUserAsync(CreateUserViewModel model, string creatorRole)
     {
         //superadmin can assign any role (except superadmin); admin can only create regular users
         var allowedRole = (creatorRole == UserRoles.SuperAdmin && model.Role != UserRoles.SuperAdmin) ? model.Role : UserRoles.User;
         var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-        var result = await _repo.CreateUserAsync(user, model.Password);
-        if (!result.Succeeded)
-            return (false, string.Join(", ", result.Errors.Select(e => e.Description)), null);
 
-        await _repo.AddRoleToUserAsync(user, allowedRole);
-        var apiKey = await _apiKeyService.CreateApiKeyAsync(user.Id);
-        return (true, null, apiKey);
+        //if any db writing step fails, all operations will be rolled back and no partial data will be saved
+        return await _repo.ExecuteInTransactionAsync<CreateUserResponse>(async () =>
+        {
+            var result = await _repo.CreateUserAsync(user, model.Password);
+            if (!result.Succeeded)
+                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+
+            var roleResult = await _repo.AddRoleToUserAsync(user, allowedRole);
+            if (!roleResult.Succeeded)
+                throw new InvalidOperationException(string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+
+            var apiKey = await _apiKeyService.CreateApiKeyAsync(user.Id);
+            return new CreateUserResponse(true, null, apiKey);
+        });
     }
 
     public async Task<bool> DeleteUserAsync(string requestingUserId, string requestingRole, string targetUserId)

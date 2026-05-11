@@ -4,11 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AspNetCore_RealTimeSharedNotes.Data;
 
-public class NotesRepository : INotesRepository
+public class NotesRepository : BaseRepository, INotesRepository
 {
-    private readonly ApplicationDbContext _db;
-
-    public NotesRepository(ApplicationDbContext db) => _db = db;
+    public NotesRepository(ApplicationDbContext db) : base(db) { }
 
     public async Task<List<Note>> GetAllNotesAsync()
     {

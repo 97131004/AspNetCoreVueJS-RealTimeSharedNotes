@@ -33,10 +33,10 @@ public class UsersController : BaseController
     public async Task<IActionResult> CreateUser([FromBody] CreateUserViewModel model)
     {
         var requestingRole = User.GetRequestingRole();
-        var (success, error, apiKey) = await _userService.CreateUserAsync(model, requestingRole);
-        if (!success)
-            return BadRequest(new { error });
-        return Json(new { apiKey });
+        var result = await _userService.CreateUserAsync(model, requestingRole);
+        if (!result.Success)
+            return BadRequest(new { error = result.Error });
+        return Json(new { apiKey = result.ApiKey });
     }
 
     [HttpPost]

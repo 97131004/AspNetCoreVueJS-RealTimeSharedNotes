@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using AspNetCore_RealTimeSharedNotes.Hubs;
-using AspNetCore_RealTimeSharedNotes.Models.Dtos;
+using AspNetCore_RealTimeSharedNotes.Models.Requests;
 using AspNetCore_RealTimeSharedNotes.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +34,7 @@ public class NotesApiController : ControllerBase
     }
 
     [HttpPost("addnote")]
-    public async Task<IActionResult> AddNote([FromBody] AddNoteRequestDto request)
+    public async Task<IActionResult> AddNote([FromBody] AddNoteRequest request)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var role = User.FindFirstValue(ClaimTypes.Role)!;

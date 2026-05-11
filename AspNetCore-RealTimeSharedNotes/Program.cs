@@ -108,6 +108,7 @@ using (var scope = app.Services.CreateScope())
     await SeedData.InitializeAsync(scope.ServiceProvider);
 
 app.UseExceptionHandler("/Home/Error");
+app.UseStatusCodePagesWithReExecute("/Home/Error", "?code={0}");
 
 if (!app.Environment.IsDevelopment())
 {
