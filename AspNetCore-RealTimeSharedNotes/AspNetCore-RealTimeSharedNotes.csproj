@@ -8,12 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
     <Compile Remove="PlaywrightTests\**" />
     <Compile Remove="UnitTests\**" />
+    <Content Remove="Migrations\**" />
     <Content Remove="PlaywrightTests\**" />
     <Content Remove="UnitTests\**" />
+    <EmbeddedResource Remove="Migrations\**" />
     <EmbeddedResource Remove="PlaywrightTests\**" />
     <EmbeddedResource Remove="UnitTests\**" />
+    <None Remove="Migrations\**" />
     <None Remove="PlaywrightTests\**" />
     <None Remove="UnitTests\**" />
   </ItemGroup>
@@ -27,10 +31,6 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.9.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <!-- Auto-build the Vue/Vite client app whenever the .NET project builds -->
