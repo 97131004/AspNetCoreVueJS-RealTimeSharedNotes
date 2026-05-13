@@ -65,7 +65,7 @@ public class ShareNotesTests : PlaywrightTest
             Assert.That(createdUserExists, Is.True, $"user '{TestConfig.TestUserEmail}' should appear in the users list after creation");
         }
 
-        //new browser, test user logs in
+        //new browser window, test user logs in
         var userPage = await _userContext.NewPageAsync();
         var userLoginPage = new LoginPage(userPage);
 
@@ -88,7 +88,7 @@ public class ShareNotesTests : PlaywrightTest
         Assert.That(userNoteIds, Is.EqualTo(adminNoteIds), "both browsers should see the same notes");
 
         //superadmin posts a note, test user must receive it
-        var noteContent = $"e2e test note – {DateTime.UtcNow:HH:mm:ss.fff}";
+        var noteContent = $"e2e test note â€“ {DateTime.UtcNow:HH:mm:ss.fff}";
         var postedNoteId = await adminNotesPage.PostNoteAsync(noteContent);
         Assert.That(postedNoteId, Is.Not.Empty, "posted note must have a server-assigned id");
 
