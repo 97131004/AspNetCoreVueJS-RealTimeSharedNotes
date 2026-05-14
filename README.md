@@ -116,7 +116,7 @@ k6 run post_notes_load_test.js
 
 ---
 
-**Load Testing (Grafana k6):** Stress testing concurrent posting + reading notes with multiple virtual users (vu's) in a controlled local network environment (isolated runner and server) using a slow ramp up from 0 to 5000 VU's:
+**Load Testing (Grafana k6):** Stress testing concurrent posting + reading notes with multiple virtual users (VUs) in a controlled local network environment (isolated runner and server) using a slow ramp up from 0 to 5000 VUs:
 
 **Infrastructure**: 2x Physical PCs (1x Test Runner, 1x Deployed Webserver [CPU: Intel Core i7-12700 12x 2.10GHz, RAM: 32GB DDR4 SDRAM]) on a 100Mbps local network.
 
@@ -125,7 +125,7 @@ k6 run post_notes_load_test.js
 15% of users are Casual Posters: 1 msg/60s + reading.  
 5% of users are Power Poster: 1 msg/10s + reading.  
 
-**Results**: The webserver reliably handles ≈2,400 Virtual Users (VUs) after 10 iterations of this load test. Maximum reliable send rate was 18 msg/s at 2400 VUs. Maximum reliable receive rate was 43182 msg/s at 2400 VUs. Failure occurs beyond 2400 VUs when network saturation causes signalr_note_rtt_lag to exceed the `p(90) < 3s` threshold (90% of all messages were delivered in under 3 seconds => has been exceeded).
+**Results**: The webserver reliably handles ≈2,400 VUs after 10 iterations of this load test. Maximum reliable send rate was 18 msg/s at 2400 VUs. Maximum reliable receive rate was 43182 msg/s at 2400 VUs. Failure occurs beyond 2400 VUs when network saturation causes signalr_note_rtt_lag to exceed the `p(90) < 3s` threshold (90% of all messages were delivered in under 3 seconds => has been exceeded).
 
 ```
          /\      Grafana   /‾‾/  
