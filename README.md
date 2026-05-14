@@ -102,7 +102,7 @@ To install Playwright's chromimum browser, build `AspNetCore-RealTimeSharedNotes
 
 **Grafana k6 installation (only needed for load testing):**
 
-**Note**: Launch the main project at least once before running Playwright tests to ensure the required superadmin user is initialized.  
+**Note**: Launch the main project at least once before running k6 tests to ensure the required superadmin user is initialized.  
 
 To run the load test via Grafana k6, first install k6 via CLI (https://grafana.com/docs/k6/latest/set-up/install-k6/). Then run the following from directory `AspNetCore-RealTimeSharedNotes\LoadTests\` :
 
