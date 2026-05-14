@@ -118,7 +118,7 @@ k6 run post_notes_load_test.js
 
 ---
 
-**Load Testing (Grafana k6):** Stress testing concurrent posting + reading notes with multiple virtual users (VUs) in a controlled local network environment (isolated runner and server) using a slow ramp up from 0 to 5000 VUs:
+**Load Testing (Grafana k6):** Stress testing concurrent posting + reading notes with multiple virtual users (VUs) in a controlled local network environment (isolated runner and server), using a slow ramp up from 0 to 5000 VUs (adding 1000 VUs every 3 minutes + 30s pause/soaking):
 
 **Infrastructure**: 2x Physical PCs (1x Test Runner, 1x Deployed Webserver [CPU: Intel Core i7-12700 12x 2.10GHz, RAM: 32GB DDR4 SDRAM]) on a 100Mbps local network.
 
