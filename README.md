@@ -123,7 +123,7 @@ k6 run post_notes_load_test.js
 **Test user configuration:** To simulate a realistic scenario, users are initialized with  different profiles/behaviours:  
 80% of users are Readers: Only reading.  
 15% of users are Casual Posters: 1 msg/60s + reading.  
-5% of users are Power Poster: 1 msg/10s + reading.  
+5% of users are Power Posters: 1 msg/10s + reading.  
 
 **Results**: The webserver reliably handles ≈2,400 VUs after 10 iterations of this load test. Maximum reliable send rate was 18 msg/s at 2400 VUs. Maximum reliable receive rate was 43182 msg/s at 2400 VUs. Failure occurs beyond 2400 VUs when network saturation causes signalr_note_rtt_lag to exceed the `p(90) < 3s` threshold (90% of all messages were delivered in under 3 seconds => has been exceeded). Webserver's CPU (≈10-15%) and RAM (≈700MB) usage remain within the system's capacity.
 
