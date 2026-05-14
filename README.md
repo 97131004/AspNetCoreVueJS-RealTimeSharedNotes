@@ -125,6 +125,8 @@ k6 run post_notes_load_test.js
 15% of users are Casual Posters: 1 msg/60s + reading.  
 5% of users are Power Posters: 1 msg/10s + reading.  
 
+**Test process:** Users authenticate to obtain a token and connect to the SignalR notes hub via web sockets. All users receive real-time note updates, while a subset also broadcasts notes to all others. The test measures note RTT (round trip time) latency and aborts if thresholds are exceeded for RTT latency, web socket handshake or http timeouts. 
+
 **Results**: The webserver reliably handles ≈2,400 VUs after 10 iterations of this load test. Maximum reliable send rate was 18 msg/s at 2400 VUs. Maximum reliable receive rate was 43182 msg/s at 2400 VUs. Failure occurs beyond 2400 VUs when network saturation causes signalr_note_rtt_lag to exceed the `p(90) < 3s` threshold (90% of all messages were delivered in under 3 seconds => has been exceeded). Webserver's CPU (≈10-15%) and RAM (≈700MB) usage remain within the system's capacity.
 
 ```
