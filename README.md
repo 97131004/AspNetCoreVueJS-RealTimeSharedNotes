@@ -1,4 +1,4 @@
-# ASP.NET Core: Real-Time Shared Notes
+# ASP.NET Core / Vue.js : Real-Time Shared Notes
 
 A real-time collaborative notes application. Logged-in users can write and post notes, which are instantly replicated and shown to all users without page reloads. The system uses SignalR for real-time updates, Vue.js for a responsive frontend, and a secure ASP.NET Core backend with MS SQL Server and Entity Framework Core.
 
