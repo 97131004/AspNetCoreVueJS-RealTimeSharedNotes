@@ -57,8 +57,6 @@ Monolithic design: MVC + service layer + data layer (communicates with DB). The 
 
 ![screenshot](https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/db1.png?raw=true)
 
-![screenshot](https://github.com/97131004/AspNetCore-RealTimeSharedNotes/blob/main/Screenshots/db2.png?raw=true)
-
 
 ## Installation
 
